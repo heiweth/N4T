@@ -1,0 +1,33 @@
+berza
+
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| area        | varchar(30) | NO   | PRI | NULL    |       |
+| date        | date        | NO   | PRI | NULL    |       |
+| hour        | smallint(6) | NO   | PRI | NULL    |       |
+| price       | float       | YES  |     | NULL    |       |
+| volume      | float       | YES  |     | NULL    |       |
+| buy_volume  | float       | YES  |     | NULL    |       |
+| sell_volume | float       | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+
+
+aukcija
+
++------------------+-------------+------+-----+---------+-------+
+| Field            | Type        | Null | Key | Default | Extra |
++------------------+-------------+------+-----+---------+-------+
+| direction        | varchar(20) | NO   | PRI | NULL    |       |
+| date             | date        | NO   | PRI | NULL    |       |
+| hour             | smallint(6) | NO   | PRI | NULL    |       |
+| offered_capacity | float       | YES  |     | NULL    |       |
+| total_requested  | float       | YES  |     | NULL    |       |
+| total_allocated  | float       | YES  |     | NULL    |       |
+| auction_price    | float       | YES  |     | NULL    |       |
+| ATC              | float       | YES  |     | NULL    |       |
+| auction_id       | int(11)     | YES  |     | NULL    |       |
+| no_of_partis     | int(11)     | YES  |     | NULL    |       |
+| awarded_partis   | int(11)     | YES  |     | NULL    |       |
++------------------+-------------+------+-----+---------+-------+
+

@@ -10,8 +10,12 @@ import glob
 import os
 
 def germany(driver, today, tomorrow, cursor, connection, path_to_docs, logf):
-	ids = ["DE-LU","BE","CH", "FR", "GB", "NL"]
-	dict_ids = {"DE-LU":"EEX","BE":"Belgium","CH":"Switzerland", "FR":"France", "GB":"Great Britain", "NL":"Netherlands"}
+	ids = ["DE-LU", "BE", "CH", "DK1", "DK2", "FI", "FR", "GB", "NL", "NO1", "NO2", "NO3", "NO4", "NO5", "SE1", "SE1",
+		   "SE1", "SE1"]
+	dict_ids = {"DE-LU": "Germany", "BE": "Belgium", "CH": "Switzerland", "FR": "France", "GB": "Great Britain",
+				"NL": "Netherlands", "DK1": "Denmark1", "DK2": "Denmark2", "FI": "Finland", "NO1": "Norway1",
+				"NO2": "Norway2", "NO3": "Norway3",	"NO4": "Norway4", "NO5": "Norway5",
+				"SE1": "Sweden1", "SE2": "Sweden2", "SE3": "Sweden3", "SE4": "Sweden4"}
 	
 	ids_2 = ["ELIX","PHELIX"]
 
@@ -43,14 +47,13 @@ def germany(driver, today, tomorrow, cursor, connection, path_to_docs, logf):
 		actions.move_to_element(element).perform()
 		element.click()
 
-		dd = driver.find_element_by_tag_name('h2').text.split('>')[-1]
 		time.sleep(2)
 		with open(path_to_docs + "epex_"+key+"_"+str(tomorrow)+".csv", 'w') as file:
 			hour = 0
 			writer = csv.writer(file)
 			writer.writerow(["Area", "Date", "Hour", "Price", "Volume", "Buy Volume", "Sell Volume"])
 			list = driver.find_element_by_class_name("js-table-values").text.split('\n')
-			for row in range(5,len(list)):
+			for row in range(12,len(list)):
 				values = list[row].split()
 				hour = hour + 1
 				buy_volume_epex = float(values[0].replace(",",""))
@@ -64,7 +67,8 @@ def germany(driver, today, tomorrow, cursor, connection, path_to_docs, logf):
 
 	german_insert_query = """INSERT IGNORE INTO berza (area, date, hour, price, volume, buy_volume, sell_volume) 
 						                   VALUES (%s,%s,%s,%s,%s,%s,%s) """  
-	we = ["DE-LU","BE","CH", "FR", "GB", "NL"]
+	we = ["DE-LU", "BE", "CH", "DK1", "DK2", "FI", "FR", "GB", "NL", "NO1", "NO2", "NO3", "NO4", "NO5", "SE1", "SE1",
+		   "SE1", "SE1"]
 
 	for i in we:
 		try:

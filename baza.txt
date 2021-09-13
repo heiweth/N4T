@@ -12,6 +12,8 @@ berza
 | sell_volume | float       | YES  |     | NULL    |       |
 +-------------+-------------+------+-----+---------+-------+
 
+create table berza (area varchar(30) NOT NULL, date date NOT NULL, hour smallint(6) NOT NULL, price float, volume fl
+oat, buy_volume float, sell_volume float, PRIMARY KEY(area, date, hour));
 
 aukcija
 
@@ -29,5 +31,8 @@ aukcija
 | auction_id       | int(11)     | YES  |     | NULL    |       |
 | no_of_partis     | int(11)     | YES  |     | NULL    |       |
 | awarded_partis   | int(11)     | YES  |     | NULL    |       |
+| source           |             | YES  |     | NULL    |       |
+| sink             |             | YES  |     | NULL    |       |
 +------------------+-------------+------+-----+---------+-------+
 
+create table aukcija (direction varchar(30) NOT NULL, date date NOT NULL, hour smallint(6) NOT NULL, offered_capacity float, total_requested float, total_allocated float, auction_price float, ATC float, auction_id int(11), no_of_partis int(11), awarded_partis int(11), source varchar(20), sink varchar(20), PRIMARY KEY(direction, date, hour));

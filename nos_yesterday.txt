@@ -1,0 +1,48 @@
+	if direction in ["RSBA", "BARS"]:
+			# get price and offered_capacity data
+		df_direction = df_today_aukcija.loc[df_today_aukcija["direction"] == direction]
+		df_direction1 = df_direction.T
+		df_direction1.insert(0, "Delivery Date", today.strftime("%m/%d/%Y"))
+		df_direction1.iloc[[1]].to_excel(writer, sheet_name=ws.title, float_format="%.2f", header=False, index=False,
+										 startrow=row_yesterday, startcol=0)
+		df_direction1.iloc[[2]].to_excel(writer, sheet_name=ws.title, float_format="%.2f", header=False, index=False,
+										 startrow=row_yesterday, startcol=28)
+
+		base = df_direction["auction_price"].mean()
+		peak = [x for x in df_direction["auction_price"].values.tolist()]
+		peak_dir = [peak[y] for y in range(7, 20)]
+		peak_pr = sum(peak_dir) / len(peak_dir)
+		avg = df_direction["offered_capacity"].mean()
+
+		# insert base, peak, average
+		base_cell = ws.cell(row=row_today, column=26)
+		base_cell.value = base
+		peak_cell = ws.cell(row=row_today, column=27)
+		peak_cell.value = peak_pr
+		avg_cell = ws.cell(row=row_today, column=28)
+		avg_cell.value = avg
+
+		# format base, peak, average
+		for cell in [base_cell, peak_cell, avg_cell]:
+			no_border(cell)
+		base_cell.fill = PatternFill("solid", fgColor="fff2cc")
+		peak_cell.fill = PatternFill("solid", fgColor="fbe5d6")
+		avg_cell.fill = PatternFill("solid", fgColor="e2f0d9")
+
+		# format rows
+		for col in ws.iter_cols(min_row=row_today, min_col=2, max_row=row_today, max_col=25):
+			for cell in col:
+				row_style(cell)
+				apply_color(cell, week_today)
+
+		for col in ws.iter_cols(min_row=row_today, min_col=30, max_row=row_today, max_col=53):
+			for cell in col:
+				row_style(cell)
+				apply_color(cell, week_today)
+
+		# date_cells
+		date_cells = [ws.cell(row=row_today, column=1), ws.cell(row=row_today, column=29)]
+		for dc in date_cells:
+			date_style(dc)
+			apply_color(cell, week_today)
+

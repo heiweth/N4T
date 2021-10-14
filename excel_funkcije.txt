@@ -1,0 +1,45 @@
+for sht in wb.sheetnames:
+	ws = wb[sht]
+	dt_lst=[]
+	for row in ws.iter_rows(min_row=2):
+		if row[0].value in dt_lst:
+			ws.delete_rows(row[0].row, 1)
+		else:
+			dt_lst.append(row[0].value)
+	wb.save(filename)
+	
+	
+for sht in wb.sheetnames:
+	ws = wb[sht]
+	if ws.max_row != 6:
+		print(sht, ws.max_row)
+		
+		
+for sht in wb.sheetnames:
+	ws = wb[sht]
+	for row in ws.iter_rows(min_row=5,max_row=5):
+		if row[0].value != '06/28/2020' :
+			ws.insert_rows(5,1)
+			ws.cell(row=5,column=1).value = '06/28/2020'
+	wb.save(filename)	
+			
+for sht in wb.sheetnames:
+	ws = wb[sht]
+	ws.delete_rows(ws.max_row, 1)
+	wb.save(filename)
+	
+for sht in wb.sheetnames:
+	ws = wb[sht]
+	for row in ws.iter_rows(min_row=2):
+		cell = ws.cell(row=row[0].row, column=1)
+		cell.font = Font(bold="True")
+		cell.border = Border(right=Side(border_style="thin",color='FF000000'), bottom=Side(border_style="thin",color='FF000000'))
+		cell.font = Font(name='Calibri', size=12)	
+		dt= datetime.strptime(cell.value, "%m/%d/%Y")
+		weekday = dt.weekday()
+		if weekday > 4 :
+			cell.fill = PatternFill("solid", fgColor="cccccc")			
+		elif int(day) % 2 == 1 :
+			cell.fill = PatternFill("solid", fgColor="b7d3ee")
+	wb.save(filename)
+	

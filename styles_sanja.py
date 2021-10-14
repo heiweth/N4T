@@ -1,19 +1,15 @@
 from openpyxl.styles import Font, NamedStyle, PatternFill, Alignment, Border, Side
 from datetime import datetime
 
-def apply_color(cell, week, dan):
+def apply_color(cell, week):
 	if week > 4 :
 		cell.fill = PatternFill("solid", fgColor="cccccc")			
-	elif int(dan) % 2 == 1 :
+	elif int(week) % 2 == 1 :
 		cell.fill = PatternFill("solid", fgColor="b7d3ee")
 	return(cell)
 	
 def date_color(cell):
-	cell.font = Font(bold="True")
-	cell.border = Border(right=Side(border_style="thin",color='FF000000'), bottom=Side(border_style="thin",color='FF000000'))
-	cell.font = Font(name='Calibri', size=12)
-	new_value = datetime.strptime(cell.value, "%Y-%m-%d")
-	cell.value = new_value.strftime("%m/%d/%Y")
+	cell.value = cell.value.strftime("%m/%d/%Y")
 	return(cell)
 
 def odd_row(cell):

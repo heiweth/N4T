@@ -14,7 +14,7 @@ from openpyxl import *
 import os
 
 
-today = date.today() 
+today = date.today()
 tomorrow = today + timedelta(days=1)
 before = today + timedelta(days=-1)
 month = tomorrow.strftime("%m")
@@ -23,6 +23,7 @@ day = tomorrow.strftime("%d")
 year_today = today.strftime("%Y")
 day_today = today.strftime("%d")
 week_today = today.weekday()
+wee_day = tomorrow.strftime("%d")
 weekday = tomorrow.weekday()
 week_before = before.weekday()
 
@@ -94,22 +95,34 @@ else:
 	writer.book = wb
 
 for sht in wb.sheetnames:
-#for sht in ["BRINDISI", "PUN"]:
+#for sht in ["IBEX"]:
+#for sht in ["ATHU","HUAT","HRHU","HUHR","BGGR","GRBG","HRRS","RSHR","BGRS","RSBG","ATCZ","CZAT"]:
+
 	writer.sheets = dict((ws.title, ws) for ws in wb.worksheets)
 	ws = wb[sht]
 
+###### tomorrow ######
 	# define number of next row
-	row_tomorrow = ws.max_row + 1
-	row_today = ws.max_row
-	row_yesterday = ws.max_row - 1
+#	row_tomorrow = ws.max_row + 1
+#	row_today = ws.max_row
+#	row_yesterday = ws.max_row - 1
 
-#	row_tomorrow = ws.max_row
-#	row_today = ws.max_row - 1
-#	row_yesterday = ws.max_row - 2	
+#### today ####
+	row_tomorrow = ws.max_row
+	row_today = ws.max_row - 1
+	row_yesterday = ws.max_row - 2	
+
+### yesterday ####
+#	row_tomorrow = ws.max_row -1
+#	row_today = ws.max_row - 2
+#	row_yesterday = ws.max_row - 3	
+
+	testcell = ws.cell(row=row_tomorrow, column=2)
 
 # iterate through areas
-	if sht in areas:
-#	if sht in []:
+	if sht in areas and testcell.value is None:
+#	if sht in areas:
+
 		# insert price data
 		df_area = df.loc[df["area"] == sht]
 		df_area1 = df_area.T
@@ -204,14 +217,15 @@ for sht in wb.sheetnames:
 			# format base/peak cells
 			for bc in [base_today_volume_cell, peak_today_volume_cell]:
 				row_style(bc)
-				
-#		wb.save(filename)
 
-	
+#		wb.save(filename)				
+
 # iterate through borders
-	elif sht in directions:
+	elif sht in directions and testcell.value is None or (ws.cell(row=row_today, column=2).value is None and sht in directions_today and sht in ["RSBA","BARS"]): 
+#	elif sht in directions:
+		#insert missing for today
 		if ws.cell(row=row_today, column=2).value is None and sht in directions_today and sht in ["RSBA","BARS"]:
-			print('check')
+			print(sht, str(today))
 			# get price and offered_capacity data
 			df_direction = df_today_aukcija.loc[df_today_aukcija["direction"] == sht]
 			df_direction1 = df_direction.T
@@ -309,16 +323,16 @@ for sht in wb.sheetnames:
 
 #		wb.save(filename)
 
-
-	else:
+	elif sht not in directions and sht not in areas:
 		print(sht)
-		cell = ws.cell(row=row_tomorrow, column=1)
-		cell.value = tomorrow.strftime("%m/%d/%Y")
-		date_style(cell)
-		apply_color(cell, weekday)
+#		cell = ws.cell(row=row_tomorrow, column=1)
+#		cell.value = today.strftime("%m/%d/%Y")
+#		date_style(cell)
+#		apply_color(cell, weekday)
 
 #		wb.save(filename)
 
+wb.save(filename)
 	
 try:
 	del wb['Sheet']
@@ -327,6 +341,4 @@ except:
 	pass
 
 # Close the Pandas Excel writer and output the Excel file.
-wb.save(filename)
-
-wb.close()
+# wb.save(filename)
